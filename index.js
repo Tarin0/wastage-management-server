@@ -32,6 +32,7 @@ async function run() {
       // await client.connect();
       const userCollection = client.db("wastageDb").collection("users");
       const contactsCollection = client.db("wastageDb").collection("contact");
+      const schedulesCollection = client.db("wastageDb").collection("schedule");
   
       app.put('/user/:email', async (req, res) => {
         const email = req.params.email;
@@ -97,6 +98,17 @@ async function run() {
       })
       app.get('/contact', async (req, res) => {
         const cursor = contactsCollection.find();
+        const result = await cursor.toArray();
+        res.send(result);
+      })
+      app.post('/schedule-info', async (req, res) => {
+        const schedule = req.body;
+        console.log(schedule);
+        const result = await schedulesCollection.insertOne(schedule);
+        res.send(result);
+      })
+      app.get('/schedule-info', async (req, res) => {
+        const cursor = schedulesCollection.find();
         const result = await cursor.toArray();
         res.send(result);
       })
